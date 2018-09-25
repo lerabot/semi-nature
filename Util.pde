@@ -7,6 +7,18 @@ boolean inFrame(PVector pos) {
 
 boolean flash = true;
 
+void startGame() {
+  textAlign(CENTER);
+  textSize(24);
+  fill(0);
+  text("Appuyez sur A pour\ncommencer la partie", width/2, height/2);
+  fill(255);
+  text("Appuyez sur A pour\ncommencer la partie", width/2+1, height/2+1);
+  
+  if (p1.actionA() || p2.actionA())
+    gameActive = true;
+}
+
 void endGame() {
   int resetTime = 350;
   if (noButtons())
@@ -61,7 +73,7 @@ void resetGame() {
 }
 
 boolean noButtons() {
-  if (p1.cont.getButton(0).pressed() || p2.cont.getButton(0).pressed())
+  if (p1.actionA() && p2.actionA())
     return false;
   else
     return true;

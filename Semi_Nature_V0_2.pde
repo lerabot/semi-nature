@@ -15,11 +15,12 @@ ArrayList<Racoon> racoons = new ArrayList<Racoon>();
 ArrayList<Flower> flowers = new ArrayList<Flower>();
 color[][] c = new color[cell][cell];
 
-int maxTime = 30;
+int maxTime = 150;
 int timeLeft = maxTime;
 int time;
 int newGameTime = 0;
 int endTime = 0;
+boolean gameActive = false;
 
 color[] seedColor = new color[3];
 color currentSeed = 0;
@@ -70,28 +71,29 @@ void setup() {
 }
 
 void draw() {
-  time = int(millis()/1000);
   background(35);
-
   updateGarden();
   drawGarden();
   
-  timeLeft = constrain((newGameTime + maxTime) - time, 0, maxTime);
-  if (timeLeft == 0)
-    endGame();
-  else {
-    for (int i = racoons.size()-1; i > 0; i--) {
-      racoons.get(i).update();
-      racoons.get(i).render();
+  if (gameActive == false)
+    startGame();
+  else  {
+    time = int(millis()/1000);
+    timeLeft = constrain((newGameTime + maxTime) - time, 0, maxTime);
+    if (timeLeft == 0)
+      endGame();
+    else {
+      for (int i = racoons.size()-1; i > 0; i--) {
+        racoons.get(i).update();
+        racoons.get(i).render();
+      }
+      p1.updatePlayer();
+      p2.updatePlayer();
     }
-    p1.updatePlayer();
-    p2.updatePlayer();
+    p2.render();
+    p1.render();
+    GUI();
   }
-  p2.render();
-  p1.render();
-
-
-  GUI();
 }
 
 void GUI() {
