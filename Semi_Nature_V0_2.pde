@@ -3,8 +3,8 @@ import net.java.games.input.*;
 import org.gamecontrolplus.*;
 import org.gamecontrolplus.gui.*;
 
-int cell = 32;
-int cellSize;
+int   cell = 32;
+int   cellSize;
 
 PFont loma;
 PImage bg;
@@ -30,7 +30,7 @@ int sAlpha = 127;
 ControlIO control;
 
 void setup() {
-  //size(700, 700);
+  //size(500, 500);
   noCursor();
   fullScreen();
   //frameRate(24);
@@ -46,9 +46,9 @@ void setup() {
   control = ControlIO.getInstance(this);
   String listing = control.deviceListToText("");
   println(listing);
-  if (control.getDevices().size() > 0) {
-    p1 = new Player(control.getDevice(2), 0, "Arrose");
-    p2 = new Player(control.getDevice(3), 1, "Plante");
+  if (control.getDevices().size() > 0) {
+    p1 = new Player(control.getDevice(0), 0, "Arrose");
+    p2 = new Player(control.getDevice(1), 1, "Plante");
   } else {
     p1 = new Player(null, 0, "Arrose");
     p2 = new Player(null, 1, "Plante");
@@ -98,7 +98,7 @@ void GUI() {
   int o = -3;
   int offset = 20;
   fill(0);
-  textSize(12);
+  textSize(14);
   pushMatrix();
   translate((width-height)/2, 0);
   text(p1.toolCurrent, cellSize * p1.pos.x + offset, cellSize * p1.pos.y);

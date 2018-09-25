@@ -37,7 +37,7 @@ void endGame() {
     text("Appuyer sur Action pour recommencer", width/2+1, height-30+1);
   }
 
-  if ((p1.cont.getButton(0).pressed() || p2.cont.getButton(0).pressed()) && endTime > resetTime) {
+  if ((p1.actionA()|| p2.actionA()) && endTime > resetTime) {
     resetGame();
   }
 }
@@ -46,11 +46,13 @@ void resetGame() {
   endTime = 0;
   timeLeft = maxTime;
   newGameTime = time;
-  p1.pos = new PVector(int(random(32)), int(random(32)));
-  p2.pos = new PVector(int(random(32)), int(random(32)));
-
-  p1.toolCurrent = arroseMaxUse;
-  p2.toolCurrent = seedMaxUse;
+  if (control.getDevices().size() > 0) {
+    p1 = new Player(control.getDevice(0), 0, "Arrose");
+    p2 = new Player(control.getDevice(1), 1, "Plante");
+  } else {
+    p1 = new Player(null, 0, "Arrose");
+    p2 = new Player(null, 1, "Plante");
+  }
   flowers.clear();
   racoons.clear();
 

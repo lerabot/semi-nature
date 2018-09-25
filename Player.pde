@@ -2,6 +2,8 @@ final int arroseTime = 20;
 final int arroseMaxUse = 10;
 final int seedMaxUse = 24;
 
+int restartTime = 0;
+
 class Player {
   PVector pos;
   PVector direction;
@@ -48,6 +50,7 @@ class Player {
 
   void updatePlayer() {
     if (this.cont != null) {
+      softReset();
       if (frameCount % 7 == 0)
         control();
       if (frameCount % 100 == 0 && this.toolCurrent < this.toolCapacity) {
@@ -103,7 +106,7 @@ class Player {
   }
 
   void seed() {
-    if (this.cont.getButton(0).pressed() && this.toolCurrent > 0) {
+    if (actionA() && this.toolCurrent > 0) {
       boolean o = false;
       for (Flower f : flowers)
         if (this.pos.dist(f.pos) == 0)
@@ -113,7 +116,7 @@ class Player {
         this.toolCurrent--;
       }
     }
-    if (this.cont.getButton(1).pressed())
+    if (actionB())
       switchSeed();
   }
 
@@ -132,7 +135,7 @@ class Player {
   }
 
   void water() {
-    if ((this.cont.getButton(1).pressed() || this.cont.getButton(0).pressed()) && this.toolTime == 0 && this.toolCurrent > 0) {
+    if ((actionA() || actionB()) && this.toolTime == 0 && this.toolCurrent > 0) {
       this.toolTime = arroseTime;
       this.toolCurrent--;
       println("Player > " + this.pos);
@@ -154,8 +157,36 @@ class Player {
       }
     }
   }
+  
+  boolean actionA() {
+   if (this.cont.getButton(1).pressed() || this.cont.getButton(2).pressed() || this.cont.getButton(4).pressed())
+     return(true);
+   else
+     return(false);
+  }
+  
+  boolean actionB() {
+   if (this.cont.getButton(0).pressed() || this.cont.getButton(3).pressed() || this.cont.getButton(5).pressed())
+     return(true);
+   else
+     return(false);
+  }
+  
+  int softResetTimer = 0;
+  void softReset() {
+    
+    if (this.cont.getButton(8).pressed())
+      softResetTimer++;
+    if (softResetTimer == 240) {
+      println("Soft Reset -> New Game");
+      resetGame();
+      softResetTimer = 0; 
+    }
+  }
 
   void drawWater() {
+    pushMatrix();
+    translate((width-height)/2, 0);
     fill(0, 0, 255, 255/arroseMaxUse * this.toolCurrent);
     pushMatrix();
     this.angle = TWO_PI/arroseTime*(toolTime-1);
@@ -166,6 +197,7 @@ class Player {
     rect(cellSize * 1.5, 0, cellSize/2, cellSize/2);
     rect(0, -cellSize * 1.5, cellSize/2, cellSize/2);
     rect(0, cellSize * 1.5, cellSize/2, cellSize/2);
+    popMatrix();
     popMatrix();
     this.toolTime--;
   }
